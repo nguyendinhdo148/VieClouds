@@ -1,0 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss";
+
+* {
+  font-family: "Be Vietnam Pro", sans-serif;
+}
+
+/* Layout chính */
+.landing-page {
+  @apply overflow-y-auto h-screen bg-gray-50 text-gray-900;
+}
+
+.landing-page-content {
+  @apply overflow-visible px-6 py-4;
+}
+
+/* Nút card */
+.card-btn {
+  @apply flex items-center gap-3 text-[12px] font-medium px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition;
+}
+
+/* Nút thêm (outline) */
+.add-btn {
+  @apply flex items-center gap-1.5 text-xs md:text-sm font-medium px-3 py-2 rounded-lg border border-purple-600 text-purple-600 hover:bg-purple-50 transition;
+}
+
+/* Nút thêm (fill) */
+.add-btn-fill {
+  @apply flex items-center gap-1.5 text-xs md:text-sm font-medium px-3 py-2 rounded-lg bg-purple-600 text-white hover:bg-purple-700 transition;
+}
