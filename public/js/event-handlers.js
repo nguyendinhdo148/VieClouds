@@ -199,6 +199,15 @@ function setupFileDialogEvents() {
     }
 }
 
+// Đồng bộ selectedFiles từ input file (dùng cho mọi trường hợp, kể cả khi set fileInput.files bằng code)
+function updateSelectedFilesFromInput() {
+    if (fileInput && fileInput.files) {
+        selectedFiles = Array.from(fileInput.files);
+    } else {
+        selectedFiles = [];
+    }
+}
+
 // File handling functions
 function handleFileSelection(e) {
     const files = Array.from(e.target.files);
@@ -411,6 +420,7 @@ window.selectDevice = selectDevice;
 window.saveSettings = saveSettings;
 window.updateDeviceNameRealtime = updateDeviceNameRealtime;
 window.updateLocalDeviceDisplay = updateLocalDeviceDisplay;
+window.updateSelectedFilesFromInput = updateSelectedFilesFromInput; // <-- export hàm mới
 
 // Join Room Dialog function
 function openJoinRoomDialog() {

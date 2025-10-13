@@ -46,7 +46,7 @@ const MyFiles = () => {
     
     // Drag and drop states
     const [isDragOver, setIsDragOver] = useState(false);
-    const [uploading, setUploading] = useState(false);
+    const [ setUploading] = useState(false);
     const [uploadQueue, setUploadQueue] = useState([]);
     
     // Credits context
@@ -83,25 +83,36 @@ const MyFiles = () => {
         }
     }
 
-    //handle P2P share
-    const handleP2PShare = (file) => {
-        // Tạo URL với file parameters
-        const fileData = {
-            id: file.id,
-            name: file.name,
-            size: file.size,
-            type: file.type || 'application/octet-stream',
-            downloadUrl: apiEndpoints.DOWNLOAD_FILE(file.id)
-        };
-        
-        // Encode file data as URL parameter
-        const encodedFileData = encodeURIComponent(JSON.stringify(fileData));
-        const p2pUrl = `http://localhost:3000?preselectedFile=${encodedFileData}`;
-        
-        // Mở P2P sharing với file đã được chọn sẵn
-        window.open(p2pUrl, '_blank');
-        toast.success(`Đang mở P2P sharing cho file: ${file.name}`);
+    // Mở VieCloud Share và gửi file trực tiếp qua postMessage
+async function handleP2PShare(fileData) {
+    try {
+        // Mở cửa sổ VieCloud Share (local hoặc domain)
+        const p2pWindow = window.open('http://localhost:3000', '_blank');
+
+        // Đợi cửa sổ mở
+        if (!p2pWindow) {
+            throw new Error('Không thể mở VieCloud Share — kiểm tra popup bị chặn.');
+        }
+
+        // Đợi cho đến khi cửa sổ P2P load xong
+        const checkReady = setInterval(() => {
+            if (p2pWindow && !p2pWindow.closed) {
+                p2pWindow.postMessage({
+                    type: 'P2P_FILE',
+                    fileData,
+                }, 'http://localhost:3000'); // phải trùng origin
+                clearInterval(checkReady);
+            } else {
+                clearInterval(checkReady);
+            }
+        }, 1000);
+
+        console.log('📤 File sent to VieCloud Share via postMessage:', fileData.name);
+    } catch (err) {
+        console.error('❌ Lỗi gửi file sang VieCloud Share:', err);
+        alert('Không thể gửi file sang VieCloud Share.');
     }
+}
 
     // Drag and Drop handlers
     const handleDragEnter = (e) => {

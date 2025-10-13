@@ -4,9 +4,8 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useAuth } from '@clerk/clerk-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {apiEndpoints} from "../util/apiEndpoints.js";
-import {Download} from "lucide-react";
-
+import { apiEndpoints } from "../util/apiEndpoints.js";
+import { Download } from "lucide-react";
 
 const FileView = () => {
     const { fileId } = useParams();
@@ -75,6 +74,32 @@ const FileView = () => {
             );
         }
 
+        // Xem trước video
+        if (['mp4', 'webm', 'ogg'].includes(extension)) {
+            return (
+                <div className="flex justify-center">
+                    <video
+                        controls
+                        src={fileUrl}
+                        className="max-w-full max-h-96 rounded-lg"
+                    />
+                </div>
+            );
+        }
+
+        // Xem trước audio
+        if (['mp3', 'wav', 'ogg'].includes(extension)) {
+            return (
+                <div className="flex justify-center">
+                    <audio
+                        controls
+                        src={fileUrl}
+                        className="w-full"
+                    />
+                </div>
+            );
+        }
+
         // Xem trước PDF
         if (extension === 'pdf') {
             return (
@@ -101,7 +126,7 @@ const FileView = () => {
             );
         }
 
-        // Không hỗ trợ xem trước - hiển thị thông tin file
+        // Không hỗ trợ xem trước
         return (
             <div className="text-center py-8">
                 <p className="text-gray-500 mb-4">File preview not available</p>

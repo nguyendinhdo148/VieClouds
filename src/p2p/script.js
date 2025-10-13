@@ -316,10 +316,17 @@ async function createPreselectedFile(fileData) {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             fileInput.files = dataTransfer.files;
-            
+
+            // Đồng bộ selectedFiles toàn cục
+            if (typeof updateSelectedFilesFromInput === 'function') {
+                updateSelectedFilesFromInput();
+            }
+
             // Trigger file list update
             if (typeof handleFileSelect === 'function') {
                 handleFileSelect({ target: { files: [file] } });
+            } else if (typeof handleFiles === 'function') {
+                handleFiles([file]);
             } else {
                 // Fallback: manually update file list display
                 updateFileListDisplay([file]);

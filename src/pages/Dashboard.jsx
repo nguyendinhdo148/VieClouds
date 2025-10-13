@@ -69,6 +69,7 @@ const Dashboard = () => {
     const fetchFiles = async () => {
         try {
             const token = await getToken();
+            console.log('User token:', token);
             const response = await axios.get(apiEndpoints.FETCH_FILES, {
                 headers: { Authorization: `Bearer ${token}` }
             });

@@ -164,9 +164,9 @@ export const SIDE_MENU_DATA = [
     },
     {
         id: "05",
-        label: "Subscription",
+        label: "Subscriptions",
         icon: CreditCard,
-        path: "/subscription",
+        path: "/subscriptions",
     },
     {
         id: "06",

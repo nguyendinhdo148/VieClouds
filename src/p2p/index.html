@@ -399,6 +399,50 @@
     <script src="/js/room-manager.js"></script>
     <script src="/js/event-handlers.js"></script>
     <script src="script.js"></script>
+     <script>
+    // Nhận file từ Dashboard gửi qua postMessage
+window.addEventListener('message', async (event) => {
+    if (event.origin !== 'http://localhost:5173' && event.origin !== 'http://localhost:3000') {
+        return;
+    }
 
+    const { type, fileData } = event.data || {};
+    if (type === 'P2P_FILE' && fileData) {
+        console.log('📥 Nhận file từ dashboard:', fileData);
+
+        try {
+            showNotification(`📁 Nhận file: ${fileData.name}`, 'info');
+
+            const response = await fetch(fileData.downloadUrl);
+            const blob = await response.blob();
+            const file = new File([blob], fileData.name, { type: fileData.type });
+
+            const fileInput = document.getElementById('file-input');
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            fileInput.files = dataTransfer.files;
+
+            // Đồng bộ selectedFiles toàn cục
+            if (typeof updateSelectedFilesFromInput === 'function') {
+                updateSelectedFilesFromInput();
+            }
+
+            if (typeof handleFileSelect === 'function') {
+                handleFileSelect({ target: { files: [file] } });
+            } else if (typeof handleFiles === 'function') {
+                handleFiles([file]);
+            } else {
+                updateFileListDisplay([file]);
+            }
+
+            showNotification(`✅ File sẵn sàng: ${fileData.name}`, 'success');
+        } catch (err) {
+            console.error('❌ Lỗi khi nhận file:', err);
+            showNotification('Không thể tải file từ dashboard', 'error');
+        }
+    }
+});
+
+    </script>
 </body>
 </html>
