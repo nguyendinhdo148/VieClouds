@@ -1,4 +1,8 @@
 # React + Vite
+npm install, thay đổi key Clerk theo tài khoản cá nhân
+
+npm run dev
+
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
